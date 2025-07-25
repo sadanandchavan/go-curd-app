@@ -1,6 +1,6 @@
 module github.com/sadanandchavan/go-crud-app
 
-go 1.24.5
+go 1.24.4
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
