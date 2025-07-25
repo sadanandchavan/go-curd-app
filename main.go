@@ -11,10 +11,9 @@ import (
 
 func main() {
 	config.ConnectDB()
-
 	r := gin.Default()
 
-	// ✅ Use custom CORS to allow only Vercel frontend
+	// CORS middleware
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"https://go-crud-frontend-ten.vercel.app"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -24,12 +23,17 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// Define routes
+	// Handle OPTIONS
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.AbortWithStatus(204)
+	})
+
+	// API routes
 	r.POST("/properties", handlers.CreateProperty)
 	r.GET("/properties", handlers.GetProperties)
 	r.GET("/properties/:id", handlers.GetProperty)
 	r.PUT("/properties/:id", handlers.UpdateProperty)
 	r.DELETE("/properties/:id", handlers.DeleteProperty)
 
-	r.Run(":8080") // Still used for local dev
+	r.Run(":8080")
 }
